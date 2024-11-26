@@ -18,6 +18,8 @@ public class Calcetto {
             }
             counter.close();
 
+            if(n%2 == 1)
+                throw new Exception();
             System.out.println(n); //TOGLIERE
             
             // INSERIMENTO GIOCATORI
