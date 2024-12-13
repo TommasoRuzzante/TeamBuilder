@@ -1,0 +1,10 @@
+giocatore1 4
+giocatore2 7
+giocatore3 9
+giocatore4 2
+giocatore5 0
+giocatore6 4
+giocatore7 1
+giocatore8 8
+giocatore9 9
+giocatore10 3.6

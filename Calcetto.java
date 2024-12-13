@@ -2,39 +2,42 @@ import java.util.Scanner;
 import java.io.*;
 public class Calcetto {
     public static void main(String[] args) {
-        try(FileReader read= new FileReader("file.txt");
-            PrintWriter print= new PrintWriter("squadre.txt");
-            Scanner sc= new Scanner(read)) {
+        try(FileReader read = new FileReader("file.txt");
+            PrintWriter print = new PrintWriter("squadre.txt");
+            Scanner sc = new Scanner(read);) {
             
-            System.out.println("inizio"); //TOGLIERE
-
-            Scanner counter= new Scanner(read);
-            int n= 0;
-            while(true) {
-                if(!counter.hasNextLine())
+            int n = 10;
+            /*while(true) {
+                if(!sc.hasNextLine())
                     break;
-                String t= counter.nextLine();
+                String t = sc.nextLine();
                 n++;
-            }
-            counter.close();
+            }*/
 
-            if(n%2 == 1)
+            if(n%2 == 1) {
+                sc.close();
                 throw new Exception();
-            System.out.println(n); //TOGLIERE
+            }
             
             // INSERIMENTO GIOCATORI
-            Roster roster= new Roster(n);
-            sc.reset();
+            Roster roster = new Roster(n);
+            System.out.println("Palle 1");  // togliere
+            int conto = 0;  // togliere
+
             do {
-                String name= sc.next();
-                Double rate= sc.nextDouble();
-                Player player= new Player(rate, name);
+                String name = sc.next();
+                Double rate = sc.nextDouble();
+                System.out.println("Palle 2");  // togliere
+                Player player = new Player(rate, name);
+                System.out.println("Palle 3");  // togliere
                 roster.insert(player);
+                conto++;  // togliere
+                System.out.println("Palle 4 " + conto);  // togliere
             } while(sc.hasNextLine());
             
             // SQUADRE
             print.print(roster.getTeams());
-
+            
             sc.close();
             print.close();
             read.close();

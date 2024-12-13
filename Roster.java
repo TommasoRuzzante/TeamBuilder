@@ -1,6 +1,6 @@
 // programma per creare 2 squadre
 
-public class Roster{
+public class Roster {
     
     // array e costruttore
     private Player[] v;
@@ -15,20 +15,17 @@ public class Roster{
         if(size == 0)
             v[0] = p;
         else if(p.compareTo(v[0]) <= 0) {
-            Player tmp = new Player[v.length];
-            System.arraycopy(v, 1, tmp, 0, v.length - 1); // copia da v a tmp traslato di 1
-            v = tmp;
+            System.arraycopy(v, 0, v, 1, v.length - 1); // copia da v a tmp traslato di 1
             v[0] = p;
         }
-        else if(p.compareTo(v[size]) > 0)
-            v[size + 1] = p
+        else if(p.compareTo(v[size - 1]) > 0)
+            v[size] = p;
         else {
             for(int i = 1; i < size; i++) {
                 if(p.compareTo(v[i]) <= 0) {
-                    Player tmp = new Player[v.length];
-                    //System.arraycopy(v, , tmp, i, v.length); // copia da v a tmp traslato di 1
-                    v = tmp;
-                    v[0] = p;
+                    System.arraycopy(v, i, v, i + 1, v.length - 1); // copia da v a tmp traslato di 1
+                    v[i] = p;
+                    break;
                 }
             }
         }
