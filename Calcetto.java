@@ -6,24 +6,17 @@ public class Calcetto {
             PrintWriter print = new PrintWriter("squadre.txt");
             Scanner sc = new Scanner(read);) {
             
-            int n = 10;
-            /*while(true) {
-                if(!sc.hasNextLine())
-                    break;
+            /*int n = 0;
+            while(sc.hasNextLine()) {
                 String t = sc.nextLine();
                 n++;
             }*/
-
-            if(n%2 == 1) {
-                sc.close();
-                throw new Exception();
-            }
             
             // INSERIMENTO GIOCATORI
-            Roster roster = new Roster(n);
+            // System.out.println(n);
+            Roster roster = new Roster(10);
             System.out.println("Palle 1");  // togliere
             int conto = 0;  // togliere
-
             do {
                 String name = sc.next();
                 Double rate = sc.nextDouble();

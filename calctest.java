@@ -26,7 +26,11 @@ public class calctest {
             String name= sc.next();
             Double rate= sc.nextDouble();
             Player player= new Player(rate, name);
-            roster.insert(player);
+            try {
+                roster.insert(player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } while(sc.hasNextLine());
         
         // SQUADRE

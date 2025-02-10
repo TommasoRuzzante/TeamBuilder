@@ -5,35 +5,31 @@ public class Roster {
     // array e costruttore
     private Player[] v;
     private int size;
+
     public Roster(int n) {
         v = new Player[n];
         size = 0;
     }
 
-    // ordinamento
+    // inserimento ordinato
     private void insertionAlg(Player p) {
-        if(size == 0)
-            v[0] = p;
-        else if(p.compareTo(v[0]) <= 0) {
-            System.arraycopy(v, 0, v, 1, v.length - 1); // copia da v a tmp traslato di 1
-            v[0] = p;
-        }
-        else if(p.compareTo(v[size - 1]) > 0)
-            v[size] = p;
-        else {
-            for(int i = 1; i < size; i++) {
-                if(p.compareTo(v[i]) <= 0) {
-                    System.arraycopy(v, i, v, i + 1, v.length - 1); // copia da v a tmp traslato di 1
-                    v[i] = p;
-                    break;
-                }
+        for(int i = size; i >= 0; i--) {
+            if(p.getRating() < v[i].getRating()) {
+                v[i + 1] = v[i];
+                v[i] = p;
             }
+            else break;
         }
     }
 
     // metodi
-    public void insert(Player p) {
-        insertionAlg(p);
+    public void insert(Player p) throws Exception {
+        if(size == v.length)
+            throw new Exception();
+        if(size == 0)
+            v[size] = p;
+        else
+            insertionAlg(p);
         size++;
     }
 

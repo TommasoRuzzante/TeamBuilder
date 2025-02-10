@@ -19,12 +19,4 @@ public class Player {
         return rating;
     }
 
-    public int compareTo(Player aa) {
-        if(rating == aa.getRating())
-            return 0;
-        else if(rating > aa.getRating())
-            return 1;
-        else return -1;
-    }
-
 }
