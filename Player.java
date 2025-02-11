@@ -3,9 +3,9 @@
 public class Player {
     
     // variabili d'istanza e costruttore
-    private double rating;
+    private int rating;
     private String name;
-    public Player(double v, String n) {
+    public Player(int v, String n) {
         rating= v;
         name= n;
     }
@@ -15,7 +15,7 @@ public class Player {
         return name;
     }
 
-    public double getRating() {
+    public int getRating() {
         return rating;
     }
 

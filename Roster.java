@@ -11,18 +11,7 @@ public class Roster {
         size = 0;
     }
 
-    // inserimento ordinato
-    private void insertionAlg(Player p) {
-        for(int i = size; i >= 0; i--) {
-            if(p.getRating() < v[i].getRating()) {
-                v[i + 1] = v[i];
-                v[i] = p;
-            }
-            else break;
-        }
-    }
-
-    // metodi
+    // metodi pubblici
     public void insert(Player p) throws Exception {
         if(size == v.length)
             throw new Exception();
@@ -33,6 +22,31 @@ public class Roster {
         size++;
     }
 
+    public String getTeams() {
+        Player[] T1 = team1();
+        Player[] T2 = team2();
+        String str = "Squadra 1:\n";
+        for(int i = 0; i < T1.length; i++)
+            str = str + T1[i].getName() + "\n";
+        str += "\nSquadra 2:\n";
+        for(int i = 0; i < T2.length; i++)
+            str= str + T2[i].getName() + "\n";
+        return str;
+    }
+
+    // inserimento ordinato
+    private void insertionAlg(Player p) {
+        v[size] = p;
+        for(int i = size - 1; i >= 0; i--) {
+            if(p.getRating() < v[i].getRating()) {
+                v[i + 1] = v[i];
+                v[i] = p;
+            }
+            else break;
+        }
+    }
+
+    // creazione 2 squadre
     private Player[] team1() {
         Player[] T1= new Player[size/2];
         for(int i = 0, k = 0; i < T1.length; i++, k++)
@@ -47,16 +61,17 @@ public class Roster {
         return T2;
     }
 
-    public String getTeams() {
-        Player[] T1 = team1();
-        Player[] T2 = team2();
-        String str = "Squadra 1: \n";
-        for(int i = 0; i < T1.length; i++)
-            str = str + T1[i].getName() + "\n";
-        str += "Squadra 2: \n";
-        for(int i = 0; i < T2.length; i++)
-            str= str + T2[i].getName() + "\n";
-        return str;
+    // calcolo bilanciamento squadre
+    private double media(Player[] arr) {
+        return 0;
+    }
+
+    private double media_quadratica(Player[] arr) {
+        return 0;
+    }
+
+    private double varianza(Player[] arr) {
+        return 0;
     }
 
 }
