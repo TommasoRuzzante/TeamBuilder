@@ -1,12 +1,16 @@
-Squadra 1: 
-giocatore5
-giocatore4
+1157.0  34.0147027033899  115.7
+Squadra 1:
 giocatore1
-giocatore2
 giocatore3
-Squadra 2: 
+giocatore5
 giocatore7
-giocatore10
+giocatore9
+69.0  5939.0  1178.0
+
+Squadra 2:
+giocatore2
+giocatore4
 giocatore6
 giocatore8
-giocatore9
+giocatore10
+82.0  7038.0  314.0

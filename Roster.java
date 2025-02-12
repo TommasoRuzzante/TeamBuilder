@@ -25,12 +25,14 @@ public class Roster {
     public String getTeams() {
         Player[] T1 = team1();
         Player[] T2 = team2();
-        String str = "Squadra 1:\n";
+        String str = varianza(v) + "  " + Math.sqrt(varianza(v)) + "  " + (varianza(v)/v.length) + "\nSquadra 1:\n";
         for(int i = 0; i < T1.length; i++)
             str = str + T1[i].getName() + "\n";
+        str = str + media(T1) + "  " + media_quadratica(T1) + "  " + varianza(T1) + "\n";
         str += "\nSquadra 2:\n";
         for(int i = 0; i < T2.length; i++)
             str= str + T2[i].getName() + "\n";
+        str = str + media(T2) + "  " + media_quadratica(T2) + "  " + varianza(T2) + "\n";
         return str;
     }
 
@@ -63,15 +65,23 @@ public class Roster {
 
     // calcolo bilanciamento squadre
     private double media(Player[] arr) {
-        return 0;
+        double e = 0;
+        for(int i = 0; i < arr.length; i++)
+            e += (arr[i].getRating())/arr.length;
+        
+        return e;
     }
 
     private double media_quadratica(Player[] arr) {
-        return 0;
+        double e = 0;
+        for(int i = 0; i < arr.length; i++)
+            e += (arr[i].getRating() * arr[i].getRating())/arr.length;
+        
+        return e;
     }
 
     private double varianza(Player[] arr) {
-        return 0;
+        return (media_quadratica(arr) - (media(arr) * media(arr)));
     }
 
 }
