@@ -1,7 +1,12 @@
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
+import java.text.NumberFormat;
+
 public class Calcetto {
     public static void main(String[] args) {
+        Runtime runtime = Runtime.getRuntime();
+        NumberFormat format = NumberFormat.getInstance();
+        
         try(FileReader read = new FileReader("file.txt");
             PrintWriter print = new PrintWriter("squadre.txt");
             Scanner lineCounter = new Scanner(read);) {
@@ -18,24 +23,16 @@ public class Calcetto {
             }
             
             // INSERIMENTO GIOCATORI
-            System.out.println(n);  // togliere
             Scanner sc = new Scanner(t); 
             Roster roster = new Roster(n);
-            System.out.println("Palle 1");  // togliere
-            int conto = 0;  // togliere
             do {
                 String name = sc.next();
                 int rate = sc.nextInt();
-                System.out.println("Palle 2");  // togliere
                 Player player = new Player(rate, name);
-                System.out.println("Palle 3");  // togliere
                 roster.insert(player);
-                conto++;  // togliere
-                System.out.println("Palle 4 " + conto);  // togliere
             } while(sc.hasNextLine());
             
             // SQUADRE
-            System.out.println("Palle 5 ");  // togliere
             print.print(roster.getTeams());
             
             sc.close();
@@ -45,6 +42,19 @@ public class Calcetto {
         catch(Exception e) {
             System.out.println(e);
         }
+
         System.out.println("FINITO!");
+
+        StringBuilder sb = new StringBuilder();
+        long maxMemory = runtime.maxMemory();
+        long allocatedMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+
+        sb.append("free memory: " + format.format(freeMemory / 1024) + "\n");
+        sb.append("allocated memory: " + format.format(allocatedMemory / 1024) + "\n");
+        sb.append("max memory: " + format.format(maxMemory / 1024) + "\n");
+        sb.append("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024) + "\n");
+
+        System.out.println(sb.toString());
     }
 }

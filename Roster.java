@@ -1,17 +1,20 @@
 // programma per creare 2 squadre
+import java.util.*;
 
 public class Roster {
     
-    // array e costruttore
+    // Variabili e Costruttore
     private Player[] v;
     private int size;
+    private int totalSum;
 
     public Roster(int n) {
         v = new Player[n];
         size = 0;
+        totalSum = 0;
     }
 
-    // metodi pubblici
+    // Metodi pubblici
     public void insert(Player p) throws Exception {
         if(size == v.length)
             throw new Exception();
@@ -20,23 +23,23 @@ public class Roster {
         else
             insertionAlg(p);
         size++;
+        totalSum += p.getRating();
     }
 
     public String getTeams() {
-        Player[] T1 = team1();
-        Player[] T2 = team2();
-        String str = varianza(v) + "  " + Math.sqrt(varianza(v)) + "  " + (varianza(v)/v.length) + "\nSquadra 1:\n";
-        for(int i = 0; i < T1.length; i++)
-            str = str + T1[i].getName() + "\n";
-        str = str + media(T1) + "  " + media_quadratica(T1) + "  " + varianza(T1) + "\n";
-        str += "\nSquadra 2:\n";
-        for(int i = 0; i < T2.length; i++)
-            str= str + T2[i].getName() + "\n";
-        str = str + media(T2) + "  " + media_quadratica(T2) + "  " + varianza(T2) + "\n";
+        List<Player>[] teams = partition(v);
+        List<Player> T1 = teams[0];
+        List<Player> T2 = teams[1];
+        String str = media(T1) + "  Squadra 1:\n";
+        for(int i = 0; i < T1.size(); i++)
+            str = str + T1.get(i).getName() + "\n";
+        str += "\n" + media(T2) + "  Squadra 2:\n";
+        for(int i = 0; i < T2.size(); i++)
+            str= str + T2.get(i).getName() + "\n";
         return str;
     }
 
-    // inserimento ordinato
+    // Inserimento ordinato
     private void insertionAlg(Player p) {
         v[size] = p;
         for(int i = size - 1; i >= 0; i--) {
@@ -48,40 +51,56 @@ public class Roster {
         }
     }
 
-    // creazione 2 squadre
-    private Player[] team1() {
-        Player[] T1= new Player[size/2];
-        for(int i = 0, k = 0; i < T1.length; i++, k++)
-            T1[i] = v[i+k];
-        return T1;
-    }
-
-    private Player[] team2() {
-        Player[] T2= new Player[size/2];
-        for(int i = 0, k = 1; i < T2.length; i++, k++)
-            T2[i] = v[i+k];
-        return T2;
-    }
-
-    // calcolo bilanciamento squadre
-    private double media(Player[] arr) {
+    // Calcolo media della squadra
+    private double media(List<Player> arr) {
         double e = 0;
-        for(int i = 0; i < arr.length; i++)
-            e += (arr[i].getRating())/arr.length;
+        for(int i = 0; i < arr.size(); i++)
+            e += (arr.get(i).getRating())/arr.size();
         
         return e;
     }
 
-    private double media_quadratica(Player[] arr) {
-        double e = 0;
-        for(int i = 0; i < arr.length; i++)
-            e += (arr[i].getRating() * arr[i].getRating())/arr.length;
-        
-        return e;
-    }
+    // Algoritmo Programmazione Dinamica
+    @SuppressWarnings("unchecked")
+    private List<Player>[] partition(Player[] values) {
+        int size = values.length;
+        int target = totalSum / 2;
 
-    private double varianza(Player[] arr) {
-        return (media_quadratica(arr) - (media(arr) * media(arr)));
+        // Tabella DP per verificare le somme ottenibili
+        boolean[][] dp = new boolean[size + 1][target + 1];
+        dp[0][0] = true;  // Possiamo sempre ottenere somma 0 senza elementi
+
+        // Riempimento della tabella DP
+        for (int i = 1; i <= size; i++) {
+            Player p = values[i - 1];
+            for (int s = target; s >= p.getRating(); s--) {
+                dp[i][s] = dp[i - 1][s] || dp[i - 1][s - (p.getRating())];
+            }
+        }
+
+        // Trova la somma più vicina a target ottenibile
+        int bestSum = 0;
+        for (int s = target; s >= 0; s--) {
+            if (dp[size][s]) {
+                bestSum = s;
+                break;
+            }
+        }
+
+        // Ricostruzione del sottoinsieme con la somma migliore trovata
+        List<Player> set1 = new ArrayList<>();
+        List<Player> set2 = new ArrayList<>();
+        int w = bestSum;
+        for (int i = size; i > 0; i--) {
+            if (w >= values[i - 1].getRating() && dp[i - 1][w - (values[i - 1].getRating())]) {
+                set1.add(values[i - 1]);
+                w -= values[i - 1].getRating();
+            } else {
+                set2.add(values[i - 1]);
+            }
+        }
+
+        return new List[]{set1, set2};
     }
 
 }
