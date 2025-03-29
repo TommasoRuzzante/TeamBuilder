@@ -7,44 +7,24 @@ public class Calcetto {
         Runtime runtime = Runtime.getRuntime();
         NumberFormat format = NumberFormat.getInstance();
         
-        try(FileReader read = new FileReader("file.txt");
-            PrintWriter print = new PrintWriter("squadre.txt");
-            Scanner lineCounter = new Scanner(read);) {
+        try {
+            // Use the builder pattern to create and configure the TeamBuilder
+            TeamBuilder teamBuilder = new TeamBuilder.Builder()
+                .inputFile("file.txt")
+                .outputFile("squadre.txt")
+                .build();
             
-            int n = 0;
-            String t = "";
-            while(true) {
-                t += lineCounter.nextLine();
-                n++;
-                if(lineCounter.hasNextLine())
-                    t += "\n";
-                else
-                    break;
-            }
+            // Build the teams
+            teamBuilder.buildTeams();
             
-            // INSERIMENTO GIOCATORI
-            Scanner sc = new Scanner(t); 
-            Roster roster = new Roster(n);
-            do {
-                String name = sc.next();
-                int rate = sc.nextInt();
-                Player player = new Player(rate, name);
-                roster.insert(player);
-            } while(sc.hasNextLine());
-            
-            // SQUADRE
-            print.print(roster.getTeams());
-            
-            sc.close();
-            print.close();
-            read.close();
+            System.out.println("FINITO!");
         }
         catch(Exception e) {
-            System.out.println(e);
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        System.out.println("FINITO!");
-
+        // Display memory usage
         StringBuilder sb = new StringBuilder();
         long maxMemory = runtime.maxMemory();
         long allocatedMemory = runtime.totalMemory();
