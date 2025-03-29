@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Squadre Equilibrate</string>
+    <string name="made_by">Made by Tommaso Ruzzante with AI Claude-3.5-Sonnet and Trae</string>
+    <string name="github_link">https://github.com/T0mmyRuzz4</string>
+</resources>

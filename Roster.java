@@ -124,42 +124,6 @@ public class Roster {
         }
         
         return new List[]{team1, team2};
-        
-        
-        /*boolean[][] dp = new boolean[size + 1][target + 1];
-        dp[0][0] = true;  // Possiamo sempre ottenere somma 0 senza elementi
-
-        // Riempimento della tabella DP
-        for (int i = 1; i <= size; i++) {
-            Player p = values[i - 1];
-            for (int s = target; s >= p.getRating(); s--) {
-                dp[i][s] = dp[i - 1][s] || dp[i - 1][s - (p.getRating())];
-            }
-        }
-
-        // Trova la somma più vicina a target ottenibile
-        int bestSum = 0;
-        for (int s = target; s >= 0; s--) {
-            if (dp[size][s]) {
-                bestSum = s;
-                break;
-            }
-        }
-
-        // Ricostruzione del sottoinsieme con la somma migliore trovata
-        List<Player> set1 = new ArrayList<>();
-        List<Player> set2 = new ArrayList<>();
-        int w = bestSum;
-        for (int i = size; i > 0; i--) {
-            if (w >= values[i - 1].getRating() && dp[i - 1][w - (values[i - 1].getRating())]) {
-                set1.add(values[i - 1]);
-                w -= values[i - 1].getRating();
-            } else {
-                set2.add(values[i - 1]);
-            }
-        }
-
-        return new List[]{set1, set2};*/
     }
 
 }

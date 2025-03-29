@@ -2,7 +2,7 @@
 
 public class Player {
     
-    // variabili d'istanza e costruttore
+    // Variabili d'istanza e costruttore
     private int rating;
     private String name;
     
@@ -11,7 +11,7 @@ public class Player {
         this.name = builder.name;
     }
     
-    // Builder pattern implementation
+    // Builder pattern
     public static class Builder {
         private int rating;
         private String name;
@@ -31,7 +31,7 @@ public class Player {
         }
     }
 
-    // metodi
+    // Metodi base
     public String getName() {
         return name;
     }

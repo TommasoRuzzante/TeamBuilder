@@ -8,13 +8,13 @@ public class Calcetto {
         NumberFormat format = NumberFormat.getInstance();
         
         try {
-            // Use the builder pattern to create and configure the TeamBuilder
+            // Crea il builder delle squadre
             TeamBuilder teamBuilder = new TeamBuilder.Builder()
                 .inputFile("file.txt")
                 .outputFile("squadre.txt")
                 .build();
             
-            // Build the teams
+            // Crea le squadre
             teamBuilder.buildTeams();
             
             System.out.println("FINITO!");
@@ -24,7 +24,7 @@ public class Calcetto {
             e.printStackTrace();
         }
 
-        // Display memory usage
+        // Memory usage in standard output
         StringBuilder sb = new StringBuilder();
         long maxMemory = runtime.maxMemory();
         long allocatedMemory = runtime.totalMemory();
