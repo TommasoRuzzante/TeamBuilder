@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TeamBuilder</string>
+    <string name="start">Welcome!\nClick to Start</string>
+    <string name="insert">Insert names</string>
 </resources>
