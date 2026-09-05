@@ -40,7 +40,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("start") {
-                            StartScreen()
+                            StartScreen(/*onDoneClicked = { navController.navigate("teams") }*/)
+                        }
+                        composable("teams") {
+                            TeamsScreen()
                         }
                     }
                 }

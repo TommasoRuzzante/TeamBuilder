@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">TeamBuilder</string>
     <string name="start">Welcome!\nClick to Start</string>
-    <string name="insert">Insert names</string>
+    <string name="count">How many players do you want to insert?</string>
+    <string name="insert">Insert names of players:</string>
+    <string name="placeholder">Name of a player</string>
+    <string name="next_screen">Done!</string>
 </resources>
