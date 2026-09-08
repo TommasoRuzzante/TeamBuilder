@@ -25,7 +25,7 @@ public class Roster {
         totalSum += p.getRating();
     }
 
-    /*public String getTeams() {
+    public String getTeams() {
         List<Player>[] teams = partition(v);
         List<Player> T1 = teams[0];
         List<Player> T2 = teams[1];
@@ -36,7 +36,7 @@ public class Roster {
         for(int i = 0; i < T2.size(); i++)
             str= str + T2.get(i).getName() + "\n";
         return str;
-    } */
+    }
 
     // Inserimento ordinato
     private void insertionAlg(Player p) {

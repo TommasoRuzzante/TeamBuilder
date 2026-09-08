@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,7 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.myapp.teambuilder.builder.Player
 import com.myapp.teambuilder.ui.theme.TeamBuilderTheme
 
 class MainActivity : ComponentActivity() {
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<String>) -> Unit) {
+fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) -> Unit) {
     var count by rememberSaveable {mutableIntStateOf(0)}
     val players = rememberSaveable(
         saver = listSaver(
@@ -83,11 +84,11 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<String>) ->
             restore = { it.toMutableStateList() }
         )
     ) {
-        mutableStateListOf<String>()
+        mutableStateListOf<Player>()
     }
 
     LaunchedEffect(count) {
-        while (players.size < count) players.add("")
+        while (players.size < count) players.add(Player("", 0))
         while (players.size > count) players.removeAt(players.size - 1)
     }
 
@@ -169,24 +170,44 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
 }
 
 @Composable
-fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<String>) {
+fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Player>) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(count) { index->
-            TextField(
-                value = players[index],
-                onValueChange = { players[index] = it },
-                maxLines = 1,
-                placeholder = { Text("") },
-                textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
-                label = { Text("Insert a player") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxHeight(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = players[index].name,
+                    onValueChange = { players[index].name = it },
+                    maxLines = 1,
+                    placeholder = { Text("") },
+                    textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
+                    label = { Text("Insert a player") },
+                    modifier = Modifier
+                        .weight(3f)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+                TextField(
+                    value = players[index].rating.toString(),
+                    onValueChange = { players[index].rating = it.toIntOrNull() ?: 0 },
+                    maxLines = 1,
+                    placeholder = { Text("") },
+                    textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
+                    label = { Text("Insert the rating") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
         }
     }
 }

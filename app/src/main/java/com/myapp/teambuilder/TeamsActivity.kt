@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.myapp.teambuilder.builder.Player
+import com.myapp.teambuilder.builder.Roster
 import com.myapp.teambuilder.ui.theme.TeamBuilderTheme
 
 class TeamsActivity : ComponentActivity() {
@@ -22,7 +24,7 @@ class TeamsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val players = intent.getStringArrayExtra("players")
+        val players = intent.getParcelableArrayExtra("players") as Array<Player>?
 
         setContent {
             TeamBuilderTheme {
@@ -41,24 +43,28 @@ class TeamsActivity : ComponentActivity() {
 }
 
 @Composable
-fun TeamsScreen(modifier: Modifier = Modifier, players: Array<String>?) {
-    LazyColumn(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        items(players!!.size) { index ->
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = players[index]
-            )
-        }
-    }
+fun TeamsScreen(modifier: Modifier = Modifier, players: Array<Player>?) {
+    if(players == null) return
+
+    val roster = Roster(players.size)
+    for(player in players)
+        roster.insert(player)
+
+    Text(
+        text = roster.getTeams(),
+        modifier = modifier.padding(16.dp)
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun TeamsScreenPreview() {
-    TeamsScreen(players = arrayOf("Player 1", "Player 2", "Player 3"))
+    TeamsScreen(players = arrayOf(
+        Player("Giocatore 1", 10),
+        Player("Giocatore 2", 20),
+        Player("Giocatore 3", 30),
+        Player("Giocatore 4", 40),
+        Player("Giocatore 5", 50),
+        Player("Giocatore 6", 60)
+    ))
 }

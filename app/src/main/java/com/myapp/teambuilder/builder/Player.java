@@ -2,8 +2,8 @@ package com.myapp.teambuilder.builder;
 public class Player {
     
     // Variabili d'istanza e costruttore
-    private final String name;
-    private final int rating;
+    private String name;
+    private int rating;
     
     public Player(String name, int rating) {
         this.name = name;
@@ -18,4 +18,11 @@ public class Player {
     public int getRating() {
         return rating;
     }
+
+    // Metodi base
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRating(int rating) { this.rating = rating; }
 }
