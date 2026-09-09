@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.myapp.teambuilder.builder.Player
 import com.myapp.teambuilder.ui.theme.TeamBuilderTheme
 
@@ -116,9 +117,10 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) ->
         Button(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(16.dp),
             onClick = { onDoneClicked(players) },
-            enabled = count == players.size
+            enabled = count > 0 && count == players.size
         ) {
             Text(text = stringResource(R.string.next_screen))
         }
@@ -131,7 +133,7 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
     Row(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -139,13 +141,13 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
             text = "Number of players:",
             modifier = Modifier
                 .weight(3f)
-                .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium
         )
         Box(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth()
                 .padding(16.dp)
         ) {
             IconButton(onClick = { expanded = !expanded }) {
@@ -156,11 +158,12 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
                 onDismissRequest = { expanded = false }
             ) {
                 repeat(10) {
+                    val num = (it + 2) * 2
                     DropdownMenuItem(
-                        text = { Text("${(it+2)*2} Player") },
+                        text = { Text("$num Players") },
                         onClick = {
                             expanded = false
-                            onCountChanged((it+2)*2)
+                            onCountChanged(num)
                         }
                     )
                 }
@@ -173,39 +176,47 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
 fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Player>) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(count) { index->
+        items(count) { index ->
             Row(
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
                     value = players[index].name,
-                    onValueChange = { players[index].name = it },
+                    onValueChange = { newName ->
+                        // Replace the object in the list to trigger recomposition
+                        players[index] = Player(newName, players[index].rating)
+                    },
                     maxLines = 1,
-                    placeholder = { Text("") },
+                    placeholder = { Text("Name") },
                     textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
-                    label = { Text("Insert a player") },
+                    label = { Text("Player Name") },
                     modifier = Modifier
                         .weight(3f)
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(4.dp)
                 )
                 TextField(
-                    value = players[index].rating.toString(),
-                    onValueChange = { players[index].rating = it.toIntOrNull() ?: 0 },
+                    value = if (players[index].rating == 0) "" else players[index].rating.toString(),
+                    onValueChange = { newRatingStr ->
+                        val rating = newRatingStr.toIntOrNull() ?: 0
+                        // Replace the object in the list to trigger recomposition
+                        players[index] = Player(players[index].name, rating)
+                    },
                     maxLines = 1,
-                    placeholder = { Text("") },
+                    placeholder = { Text("0") },
                     textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
-                    label = { Text("Insert the rating") },
+                    label = { Text("Rating") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                        .weight(1.2f)
+                        .padding(4.dp)
                 )
             }
         }

@@ -29,10 +29,10 @@ public class Roster {
         List<Player>[] teams = partition(v);
         List<Player> T1 = teams[0];
         List<Player> T2 = teams[1];
-        String str = media(T1) + "  Squadra 1:\n";
+        String str = "Squadra 1:\n";
         for(int i = 0; i < T1.size(); i++)
             str = str + T1.get(i).getName() + "\n";
-        str += "\n" + media(T2) + "  Squadra 2:\n";
+        str += "\n\n" + "Squadra 2:\n";
         for(int i = 0; i < T2.size(); i++)
             str= str + T2.get(i).getName() + "\n";
         return str;
@@ -48,15 +48,6 @@ public class Roster {
             }
             else break;
         }
-    }
-
-    // Calcolo media della squadra
-    private double media(List<Player> arr) {
-        double e = 0;
-        for(int i = 0; i < arr.size(); i++)
-            e += (arr.get(i).getRating())/arr.size();
-        
-        return e;
     }
 
     // Algoritmo Programmazione Dinamica

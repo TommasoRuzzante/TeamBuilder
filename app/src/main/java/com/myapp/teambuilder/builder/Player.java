@@ -1,5 +1,7 @@
 package com.myapp.teambuilder.builder;
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     
     // Variabili d'istanza e costruttore
     private String name;
