@@ -4,12 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,10 +56,17 @@ fun TeamsScreen(modifier: Modifier = Modifier, players: Array<Player>?) {
     val roster = Roster(players.size)
     for(player in players)
         roster.insert(player)
+    val textTeams = roster.getTeams()
+
+    val clipboardManager = LocalClipboardManager.current
 
     Text(
-        text = roster.getTeams(),
-        modifier = modifier.padding(16.dp),
+        text = "Click the text to copy\n\n${textTeams}",
+        modifier = modifier
+            .padding(16.dp)
+            .clickable(onClick = {
+                clipboardManager.setText(AnnotatedString(textTeams))
+            }),
         fontSize = 22.sp,
         fontWeight = FontWeight.Medium
     )

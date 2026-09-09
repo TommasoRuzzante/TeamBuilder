@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -196,8 +198,11 @@ fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Pl
                     },
                     maxLines = 1,
                     placeholder = { Text("Name") },
-                    textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
+                    textStyle = TextStyle(
+                        color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                        fontWeight = FontWeight.Bold),
                     label = { Text("Player Name") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(3f)
                         .padding(4.dp)
@@ -211,9 +216,11 @@ fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Pl
                     },
                     maxLines = 1,
                     placeholder = { Text("0") },
-                    textStyle = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
+                    textStyle = TextStyle(
+                        color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                        fontWeight = FontWeight.Bold),
                     label = { Text("Rating") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                     modifier = Modifier
                         .weight(1.2f)
                         .padding(4.dp)

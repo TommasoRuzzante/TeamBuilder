@@ -32,7 +32,7 @@ public class Roster {
         String str = "Squadra 1:\n";
         for(int i = 0; i < T1.size(); i++)
             str = str + T1.get(i).getName() + "\n";
-        str += "\n\n" + "Squadra 2:\n";
+        str += "\n" + "Squadra 2:\n";
         for(int i = 0; i < T2.size(); i++)
             str= str + T2.get(i).getName() + "\n";
         return str;
