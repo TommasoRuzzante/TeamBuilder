@@ -51,9 +51,16 @@ import androidx.compose.ui.unit.sp
 import com.myapp.teambuilder.builder.Player
 import com.myapp.teambuilder.ui.theme.TeamBuilderTheme
 
+/**
+ * Entry-point activity for the app. Presents the user with a form
+ * to select the number of players and input each player's name
+ * and skill rating. When the user clicks "Next", the collected
+ * list of players is passed to [TeamsActivity] for partitioning.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge display (draw behind status/navigation bars)
         enableEdgeToEdge()
 
         setContent {
@@ -63,8 +70,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),
+                        // Callback invoked when the user confirms the player list
                         onDoneClicked = { players ->
                             val playersArray = players.toTypedArray()
+                            // Build the Intent to navigate to TeamsActivity
                             val intent = Intent(this, TeamsActivity::class.java).apply {
                                 putExtra("players", playersArray)
                             }
@@ -78,9 +87,19 @@ class MainActivity : ComponentActivity() {
 
 }
 
+/**
+ * Top-level composable for the player input screen.
+ * Manages the number of players and the list of Player objects,
+ * coordinating between the dropdown selector, the input fields,
+ * and the confirmation button.
+ * @param modifier      Layout modifiers applied to the root container
+ * @param onDoneClicked Callback triggered with the completed player list
+ */
 @Composable
 fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) -> Unit) {
+    // Selected number of players (persisted across config changes)
     var count by rememberSaveable {mutableIntStateOf(0)}
+    // Mutable list of Player objects, state-saved so it survives rotation
     val players = rememberSaveable(
         saver = listSaver(
             save = { it.toList() },
@@ -90,16 +109,21 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) ->
         mutableStateListOf<Player>()
     }
 
+    // Keep the players list in sync with the selected count.
+    // Whenever count changes, add empty placeholder players or
+    // remove excess ones so the list size always equals count.
     LaunchedEffect(count) {
         while (players.size < count) players.add(Player("", 0))
         while (players.size > count) players.removeAt(players.size - 1)
     }
 
+    // Root vertical layout: dropdown (top), input list (middle), button (bottom)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Dropdown menu to choose the number of players
         MinimalDropdownMenu(modifier = Modifier
             .weight(1f)
             .fillMaxWidth(),
@@ -108,6 +132,7 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) ->
             }
         )
 
+        // Scrollable list of (name + rating) text fields for each player
         NameInput(
             modifier = Modifier
                 .weight(8f)
@@ -116,6 +141,7 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) ->
             players = players
         )
 
+        // Confirmation button: enabled only when count > 0 and the list is fully populated
         Button(
             modifier = Modifier
                 .weight(1f)
@@ -129,8 +155,16 @@ fun StartScreen(modifier: Modifier = Modifier, onDoneClicked : (List<Player>) ->
     }
 }
 
+/**
+ * A minimal row containing a label and an icon button that opens a
+ * dropdown menu. The menu lets the user pick how many players will
+ * participate (values are even numbers from 4 to 22: (i+2)*2 for i in 0..9).
+ * @param modifier       Layout modifiers
+ * @param onCountChanged Callback receiving the chosen player count
+ */
 @Composable
 fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> Unit) {
+    // Whether the dropdown menu is currently expanded
     var expanded by remember { mutableStateOf(false) }
     Row(
         modifier = modifier
@@ -152,9 +186,11 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
                 .weight(1f)
                 .padding(16.dp)
         ) {
+            // Toggles the dropdown open/closed
             IconButton(onClick = { expanded = !expanded }) {
                 Icon(Icons.Default.Menu, contentDescription = "More options")
             }
+            // Dropdown listing the available even player counts (4 .. 22)
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
@@ -174,6 +210,19 @@ fun MinimalDropdownMenu(modifier: Modifier = Modifier, onCountChanged: (Int) -> 
     }
 }
 
+/**
+ * Renders a scrollable list of rows, one per player.
+ * Each row contains two TextFields: one for the player's name
+ * and one for their numeric skill rating.
+ * 
+ * Note: updating a field replaces the Player object in the list
+ * (rather than mutating it in place) so Compose detects the state
+ * change and recomposes the affected row.
+ * 
+ * @param modifier Layout modifiers
+ * @param count    Number of input rows to render
+ * @param players  Mutable list of Player objects to bind to the inputs
+ */
 @Composable
 fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Player>) {
     LazyColumn(
@@ -190,6 +239,7 @@ fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Pl
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Player name input (text keyboard, Next IME action)
                 TextField(
                     value = players[index].name,
                     onValueChange = { newName ->
@@ -207,6 +257,7 @@ fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Pl
                         .weight(3f)
                         .padding(4.dp)
                 )
+                // Player rating input (numeric keyboard, Done IME action)
                 TextField(
                     value = if (players[index].rating == 0) "" else players[index].rating.toString(),
                     onValueChange = { newRatingStr ->
@@ -230,6 +281,9 @@ fun NameInput(modifier: Modifier = Modifier, count: Int, players: MutableList<Pl
     }
 }
 
+/**
+ * Preview of the StartScreen composable for Android Studio design view.
+ */
 @Preview(showBackground = true)
 @Composable
 fun StartScreenPreview() {

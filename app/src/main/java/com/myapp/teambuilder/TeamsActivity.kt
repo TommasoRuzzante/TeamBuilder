@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -22,12 +21,21 @@ import com.myapp.teambuilder.builder.Player
 import com.myapp.teambuilder.builder.Roster
 import com.myapp.teambuilder.ui.theme.TeamBuilderTheme
 
+/**
+ * Second screen of the app. Receives the list of players from
+ * [MainActivity] via the Intent, runs the balanced team
+ * partitioning algorithm (via [Roster]), and displays the
+ * resulting two teams. Tapping the text copies the team
+ * rosters to the system clipboard.
+ */
 class TeamsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge display (draw behind status/navigation bars)
         enableEdgeToEdge()
 
-        // Use getSerializableExtra since Player implements Serializable
+        // Retrieve the player array passed from MainActivity.
+        // getSerializableExtra is used because Player implements Serializable.
         val players = intent.getSerializableExtra("players") as? Array<Player>
 
         setContent {
@@ -46,25 +54,44 @@ class TeamsActivity : ComponentActivity() {
 
 }
 
+/**
+ * Composable that displays the generated team rosters.
+ * If no players are available (e.g. intent extra was missing),
+ * shows an error message instead.
+ * 
+ * The displayed text is clickable: tapping it copies the
+ * formatted team rosters (without the "Click to copy" hint)
+ * to the device clipboard.
+ * 
+ * @param modifier Layout modifiers
+ * @param players  Array of players received from the previous screen,
+ *                 or null if extraction from the Intent failed.
+ */
 @Composable
 fun TeamsScreen(modifier: Modifier = Modifier, players: Array<Player>?) {
+    // Guard clause: no players received -> show error
     if(players == null) {
         Text(text = "No players found", modifier = modifier.padding(16.dp))
         return
     }
 
+    // Build a Roster, insert all players (sorted by rating),
+    // then partition into two balanced teams and format as text.
     val roster = Roster(players.size)
     for(player in players)
         roster.insert(player)
     val textTeams = roster.getTeams()
 
+    // Access the system clipboard service to enable copy-on-tap
     val clipboardManager = LocalClipboardManager.current
 
     Text(
+        // Display hint text followed by the formatted team lists
         text = "Click the text to copy\n\n${textTeams}",
         modifier = modifier
             .padding(16.dp)
             .clickable(onClick = {
+                // Copy only the team rosters (without the helper hint)
                 clipboardManager.setText(AnnotatedString(textTeams))
             }),
         fontSize = 22.sp,
@@ -72,6 +99,9 @@ fun TeamsScreen(modifier: Modifier = Modifier, players: Array<Player>?) {
     )
 }
 
+/**
+ * Preview of TeamsScreen with 6 sample players, for Android Studio design view.
+ */
 @Preview(showBackground = true)
 @Composable
 fun TeamsScreenPreview() {
